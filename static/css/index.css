@@ -1,0 +1,15 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.left{
+    float: left;
+}
+.advertise{
+    float: right;
+}
+.article-list .article-item .art-body img{
+    width: 80px;
+    height: 80px;
+}

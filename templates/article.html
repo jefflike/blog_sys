@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/index.css?time=201712061">
+    <link rel="stylesheet" href="/static/css/theme/{{ blog.theme }}.css" />
+</head>
+<body>
+    <div>
+        <nav class="navbar-default" >
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/{{ blog.site }}/">{{ blog.title }}</a>
+                </div>
+            </div>
+        </nav>
+    <div class="container">
+        <div class="article-list col-md-8 left" style="position: relative">
+            <h1>{{ blog.title }}</h1>
+            {{ content.articledetail__content |safe }}
+            <div style="position: absolute;right: 150px;font-family:'Glyphicons Halflings'" class="glyphicon-thumbs-up" onclick="updown(this,{{ content.nid }},1);">赞 <i>{{ content.up_count }}</i></div>
+            <div style="position: absolute;right: 80px;font-family:'Glyphicons Halflings'" class="glyphicon-thumbs-down" onclick="updown(this,{{ content.nid }},0);">踩 <i>{{ content.down_count }}</i></div>
+            <div style="width: 100%;margin-top: 20px">   </div>
+            {% for re in reply %}
+                <div style="background-color: #e0e0e0">{{ re.comment__create_time }}&nbsp [发言人]{{ re.comment__user__username }}</div>
+                {% if re.comment__reply__user__username %}
+                <p>@{{ re.comment__reply__user__username }}</p>
+                {% else %}
+                    <p></p>
+                {% endif %}
+            <div style="width: 100%;border-bottom: #00b3ee 1px solid ;margin-top: 5px">  {{ re.comment__content }} </div>
+
+            {% endfor %}
+        </div>
+        <div class="advertise col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">随笔分类</div>
+                    {% for item in cate_list %}
+                    <div class="panel-body">
+                        <a href="/{{ blog.site }}/category/{{ item.category__nid }}/">{{ item.category__title }}({{ item.c }})</a>
+                    </div>
+                    {% endfor %}
+             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">我的标签</div>
+                    {% for item in tag_list %}
+                    <div class="panel-body">
+                        <a href="/{{ blog.site }}/tag/{{ item.tag__nid }}/">{{ item.tag__title }}({{ item.co }})</a>
+                    </div>
+                    {% endfor %}
+             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">时间分类</div>
+                    {% for item in date_list %}
+                    <div class="panel-body">
+                        <a href="/{{ blog.site }}/date/{{ item.c }}">{{ item.c }}({{ item.ct }})</a>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="/static/jquery-1.12.4.js"></script>
+    <script>
+        $(function () {
+            $(".take_off").click(function () {
+                $.ajax({
+                url:'/',
+                type:'POST',
+                data:{csrfmiddlewaretoken:'{{ csrf_token }}'},
+                dataType:"JSON",
+                success:function(arg){
+                    console.log(arg);
+                    if(arg.status){
+                        location.href='/'
+                    }else{
+                    }}
+            })
+            });
+       });
+        function updown(ths,nid,val){
+            $.ajax({
+                url: '/updown.html',
+                data:{'val':val,'nid':nid,'csrfmiddlewaretoken':'{{ csrf_token }}'},
+                type: "POST",
+                dataType:'JSON',
+                success:function(arg){
+                    if(arg.status){
+                        // 点赞成功刷新页面
+                        location.reload();
+                    }else{
+                        alert(arg.msg)
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

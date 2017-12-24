@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/index.css?time=201712061">
+</head>
+<body>
+    <div>
+        <nav class="navbar-default" >
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">我的技术论坛</a>
+                </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% if type_id %}
+                        <li><a href="/">全部</a></li>
+                    {% else %}
+                        <li class="active"><a href="/">全部</a></li>
+                    {% endif %}
+
+                    {% for item in type_choice_list %}
+                        {% if item.0 == type_id %}
+                            <li class="active"><a href="/all/{{ item.0 }}/">{{ item.1 }}</a></li>
+                        {% else %}
+                            <li><a href="/all/{{ item.0 }}/">{{ item.1 }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                       <li><a href="/login/">登陆</a></li>
+                       <li><a href="/signup/">注册</a></li>
+                  </ul>
+            </div>
+            </div>
+        </nav>
+    <div class="container">
+        <div class="article-list col-md-8 left">
+                {% for article in article_list %}
+                    <div class="article-item">
+                        <h3 class="art-head"><a>{{ article.title }}</a></h3>
+                        <div class="art-body clearfix">
+
+                            <a class="left"><img src="{{ article.blog.user.avatar }}"></a>
+                            {{ article.summary }}
+                        </div>
+                        <div class="art-footer">
+                            <a>
+                                <span class="glyphicon glyphicon-user"></span>
+                               {{ article.blog.user.username }}
+                            </a>
+                            <a><span>发布于</span>{{ article.c }}</a>
+                            <a><span class="glyphicon glyphicon-edit"></span>{{ article.comment_count}}</a>
+                            <a><span class="glyphicon glyphicon-search"></span>{{ article.read_count }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {{ page_info.pager|safe }}
+            </ul>
+        </nav>
+            </div>
+
+        <div class="advertise col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">广告位</div>
+                    <div class="panel-body">
+                        广告
+                    </div>
+                    <div class="panel-body">
+                        广告
+                    </div>
+             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">广告位</div>
+                    <div class="panel-body">
+                        广告
+                    </div>
+                    <div class="panel-body">
+                        广告
+                    </div>
+             </div>
+        </div>
+
+    </div>
+    </div>
+</body>
+</html>
